@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { Loading } from "../Loading";
-class ClassState extends Component{
+
+const SECURITY_CODE = 'paradigma' 
+class ClassState extends Component{    
     
     constructor(props){
         super(props);
         this.state = {
             error: false,
             loading: false,
+            value: '',
         };
     }
 
@@ -23,7 +26,10 @@ class ClassState extends Component{
         if(!!this.state.loading){
             setTimeout(()=>{
                 console.log('haciendo validacion');
-                this.setState({loading: false})
+                if (this.state.value !== SECURITY_CODE){
+                    this.setState({error: true});
+                }
+                this.setState({loading: false});
                 console.log('Terminando validacion');
             },1500)
         }
@@ -37,8 +43,12 @@ class ClassState extends Component{
                 <p>Ingresa el codigo de seguridad</p>
                 {this.state.error && <p>Erorr: codigo incorrecto</p>}
                 {this.state.loading && <Loading/>}
-                <input placeholder="Codigo de seguridad"/>
-                <button onClick={() => this.setState({loading: true})}>
+                <input 
+                placeholder="Codigo de seguridad"
+                value = {this.state.value}
+                onChange={(event)=>this.setState({value: event.target.value})}
+                />
+                <button onClick={() => this.setState({error:false,loading: true})}>
                     Comprobar
                 </button>
             </div>
